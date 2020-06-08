@@ -1,12 +1,12 @@
 //
-// Created by mwo on 13/04/16.
+// Created by ubuntu on 13/04/16.
 //
 
 
 #ifndef CROWXMR_RPCCALLS_H
 #define CROWXMR_RPCCALLS_H
 
-#include "monero_headers.h"
+#include "etcoin_headers.h"
 
 #include "wipeable_string.h"
 
@@ -49,8 +49,8 @@ struct has_destructor
 
 namespace cryptonote
 {
-// declare struct in monero's cryptonote namespace.
-// monero should provide definition for this,
+// declare struct in etcoin's cryptonote namespace.
+// etcoin should provide definition for this,
 // but we need to have it declared as we are going to
 // check if its definition exist or not. depending on this
 // we decide what gets to be defined as
@@ -85,12 +85,12 @@ public:
 
     using login_opt = boost::optional<epee::net_utils::http::login>;
 
-    rpccalls(string _deamon_url = "http:://127.0.0.1:18081",
+    rpccalls(string _deamon_url = "http:://127.0.0.1:14041",
              login_opt _login = login_opt {},
              uint64_t _timeout = 200000);
 
     bool
-    connect_to_monero_deamon();
+    connect_to_etcoin_deamon();
 
     uint64_t
     get_current_height();
@@ -135,7 +135,7 @@ public:
         {
             std::lock_guard<std::mutex> guard(m_daemon_rpc_mutex);
 
-            if (!connect_to_monero_deamon())
+            if (!connect_to_etcoin_deamon())
             {
                 cerr << "get_alt_blocks: not connected to deamon" << endl;
                 return false;
@@ -161,14 +161,14 @@ public:
 
             if (!err.empty())
             {
-                cerr << "Error connecting to Monero deamon due to "
+                cerr << "Error connecting to ETcoin deamon due to "
                      << err << endl;
                 return false;
             }
         }
         else
         {
-            cerr << "Error connecting to Monero deamon at "
+            cerr << "Error connecting to ETcoin deamon at "
                  << deamon_url << endl;
             return false;
         }

@@ -1,5 +1,5 @@
 //
-// Created by mwo on 28/05/17.
+// Created by ubuntu on 28/05/17.
 //
 
 #include "MempoolStatus.h"
@@ -325,8 +325,8 @@ MempoolStatus::is_thread_running()
     return is_running;
 }
 
-bf::path MempoolStatus::blockchain_path {"/home/mwo/.bitmonero/lmdb"};
-string MempoolStatus::deamon_url {"http:://127.0.0.1:18081"};
+bf::path MempoolStatus::blockchain_path {"/home/ubuntu/.etcoin/lmdb"};
+string MempoolStatus::deamon_url {"http:://127.0.0.1:14041"};
 cryptonote::network_type MempoolStatus::nettype {cryptonote::network_type::MAINNET};
 atomic<bool>       MempoolStatus::is_running {false};
 boost::thread      MempoolStatus::m_thread;

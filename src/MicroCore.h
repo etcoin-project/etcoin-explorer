@@ -1,5 +1,5 @@
 //
-// Created by mwo on 5/11/15.
+// Created by ubuntu on 5/11/15.
 //
 
 #ifndef XMREG01_MICROCORE_H
@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "monero_headers.h"
+#include "etcoin_headers.h"
 #include "tools.h"
 
 namespace xmreg

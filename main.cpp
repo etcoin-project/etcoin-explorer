@@ -104,7 +104,7 @@ main(int ac, const char* av[])
     bool enable_emission_monitor      {*enable_emission_monitor_opt};
 
 
-    // set  monero log output level
+    // set  etcoin log output level
     uint32_t log_level = 0;
     mlog_configure("", true);
 
@@ -207,9 +207,9 @@ main(int ac, const char* av[])
 
     string deamon_url {*deamon_url_opt};
 
-    if (testnet && deamon_url == "http:://127.0.0.1:18081")
+    if (testnet && deamon_url == "http:://127.0.0.1:14041")
         deamon_url = "http:://127.0.0.1:28081";
-    if (stagenet && deamon_url == "http:://127.0.0.1:18081")
+    if (stagenet && deamon_url == "http:://127.0.0.1:14041")
         deamon_url = "http:://127.0.0.1:38081";
 
     uint64_t mempool_info_timeout {5000};
@@ -232,12 +232,12 @@ main(int ac, const char* av[])
     {
         // This starts new thread, which aim is
         // to calculate, store and monitor
-        // current total Monero emission amount.
+        // current total ETcoin emission amount.
 
         // This thread stores the current emission
         // which it has caluclated in
         // <blockchain_path>/emission_amount.txt file,
-        // e.g., ~/.bitmonero/lmdb/emission_amount.txt.
+        // e.g., ~/.etcoin/lmdb/emission_amount.txt.
         // So instead of calcualting the emission
         // from scrach whenever the explorer is started,
         // the thread is initalized with the values
@@ -297,7 +297,7 @@ main(int ac, const char* av[])
 
     // create instance of page class which
     // contains logic for the website
-    xmreg::page xmrblocks(&mcore,
+    xmreg::page etcoinblocks(&mcore,
                           core_storage,
                           deamon_url,
                           nettype,
@@ -326,34 +326,34 @@ main(int ac, const char* av[])
 
     CROW_ROUTE(app, "/")
     ([&]() {
-        return myxmr::htmlresponse(xmrblocks.index2());
+        return myxmr::htmlresponse(etcoinblocks.index2());
     });
 
     CROW_ROUTE(app, "/page/<uint>")
     ([&](size_t page_no) {
-        return myxmr::htmlresponse(xmrblocks.index2(page_no));
+        return myxmr::htmlresponse(etcoinblocks.index2(page_no));
     });
 
     CROW_ROUTE(app, "/block/<uint>")
     ([&](size_t block_height) {
-        return myxmr::htmlresponse(xmrblocks.show_block(block_height));
+        return myxmr::htmlresponse(etcoinblocks.show_block(block_height));
     });
     
     CROW_ROUTE(app, "/randomx/<uint>")
     ([&](size_t block_height) {
-        return myxmr::htmlresponse(xmrblocks.show_randomx(block_height));
+        return myxmr::htmlresponse(etcoinblocks.show_randomx(block_height));
     });
 
     CROW_ROUTE(app, "/block/<string>")
     ([&](string block_hash) {
         return myxmr::htmlresponse(
-                xmrblocks.show_block(remove_bad_chars(block_hash)));
+                etcoinblocks.show_block(remove_bad_chars(block_hash)));
     });
 
     CROW_ROUTE(app, "/tx/<string>")
     ([&](string tx_hash) {
         return myxmr::htmlresponse(
-                xmrblocks.show_tx(remove_bad_chars(tx_hash)));
+                etcoinblocks.show_tx(remove_bad_chars(tx_hash)));
     });
     if (enable_autorefresh_option)
     {
@@ -362,7 +362,7 @@ main(int ac, const char* av[])
             bool refresh_page {true};
             uint16_t with_ring_signatures {0};
             return myxmr::htmlresponse(
-                xmrblocks.show_tx(remove_bad_chars(tx_hash), with_ring_signatures, refresh_page));
+                etcoinblocks.show_tx(remove_bad_chars(tx_hash), with_ring_signatures, refresh_page));
         });
     }
 
@@ -371,37 +371,37 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/txhex/<string>")
         ([&](string tx_hash) {
             return crow::response(
-                    xmrblocks.show_tx_hex(remove_bad_chars(tx_hash)));
+                    etcoinblocks.show_tx_hex(remove_bad_chars(tx_hash)));
         });
 
         CROW_ROUTE(app, "/ringmembershex/<string>")
         ([&](string tx_hash) {
             return crow::response(
-                    xmrblocks.show_ringmembers_hex(remove_bad_chars(tx_hash)));
+                    etcoinblocks.show_ringmembers_hex(remove_bad_chars(tx_hash)));
         });
 
         CROW_ROUTE(app, "/blockhex/<uint>")
         ([&](size_t block_height) {
             return crow::response(
-                    xmrblocks.show_block_hex(block_height, false));
+                    etcoinblocks.show_block_hex(block_height, false));
         });
 
         CROW_ROUTE(app, "/blockhexcomplete/<uint>")
         ([&](size_t block_height) {
             return crow::response(
-                    xmrblocks.show_block_hex(block_height, true));
+                    etcoinblocks.show_block_hex(block_height, true));
         });
 
 //        CROW_ROUTE(app, "/ringmemberstxhex/<string>")
 //        ([&](string tx_hash) {
 //            return crow::response(
-//              xmrblocks.show_ringmemberstx_hex(remove_bad_chars(tx_hash)));
+//              etcoinblocks.show_ringmemberstx_hex(remove_bad_chars(tx_hash)));
 //        });
 
         CROW_ROUTE(app, "/ringmemberstxhex/<string>")
         ([&](string tx_hash) {
             return myxmr::jsonresponse {
-                xmrblocks.show_ringmemberstx_jsonhex(
+                etcoinblocks.show_ringmemberstx_jsonhex(
                         remove_bad_chars(tx_hash))};
         });
 
@@ -411,7 +411,7 @@ main(int ac, const char* av[])
     ([&](string tx_hash, uint16_t with_ring_signatures)
      {
         return myxmr::htmlresponse(
-                xmrblocks.show_tx(remove_bad_chars(tx_hash), 
+                etcoinblocks.show_tx(remove_bad_chars(tx_hash), 
                     with_ring_signatures));
     });
     if (enable_autorefresh_option)
@@ -420,7 +420,7 @@ main(int ac, const char* av[])
         ([&](string tx_hash, uint16_t with_ring_signature) {
             bool refresh_page {true};
             return myxmr::htmlresponse(
-                xmrblocks.show_tx(remove_bad_chars(tx_hash), with_ring_signature, refresh_page));
+                etcoinblocks.show_tx(remove_bad_chars(tx_hash), with_ring_signature, refresh_page));
         });
     }
 
@@ -448,7 +448,7 @@ main(int ac, const char* av[])
 
         string domain      =  get_domain(req);
 
-        string response = xmrblocks.show_my_outputs(
+        string response = etcoinblocks.show_my_outputs(
                                          tx_hash, xmr_address,
                                          viewkey, raw_tx_data,
                                          domain);
@@ -463,7 +463,7 @@ main(int ac, const char* av[])
 
         string domain = get_domain(req);
 
-        return myxmr::htmlresponse(xmrblocks.show_my_outputs(
+        return myxmr::htmlresponse(etcoinblocks.show_my_outputs(
                                          remove_bad_chars(tx_hash),
                                          remove_bad_chars(xmr_address),
                                          remove_bad_chars(viewkey),
@@ -496,7 +496,7 @@ main(int ac, const char* av[])
 
             string domain      = get_domain(req);
 
-            return myxmr::htmlresponse(xmrblocks.show_prove(tx_hash,
+            return myxmr::htmlresponse(etcoinblocks.show_prove(tx_hash,
                                         xmr_address,
                                         tx_prv_key,
                                         raw_tx_data,
@@ -511,7 +511,7 @@ main(int ac, const char* av[])
 
         string domain = get_domain(req);
 
-        return myxmr::htmlresponse(xmrblocks.show_prove(
+        return myxmr::htmlresponse(etcoinblocks.show_prove(
                                     remove_bad_chars(tx_hash),
                                     remove_bad_chars(xmr_address),
                                     remove_bad_chars(tx_prv_key),
@@ -523,7 +523,7 @@ main(int ac, const char* av[])
     {
         CROW_ROUTE(app, "/rawtx")
         ([&]() {
-            return myxmr::htmlresponse(xmrblocks.show_rawtx());
+            return myxmr::htmlresponse(etcoinblocks.show_rawtx());
         });
 
         CROW_ROUTE(app, "/checkandpush").methods("POST"_method)
@@ -544,10 +544,10 @@ main(int ac, const char* av[])
 
             if (action == "check")
                 return myxmr::htmlresponse(
-                        xmrblocks.show_checkrawtx(raw_tx_data, action));
+                        etcoinblocks.show_checkrawtx(raw_tx_data, action));
             else if (action == "push")
                 return myxmr::htmlresponse(
-                        xmrblocks.show_pushrawtx(raw_tx_data, action));
+                        etcoinblocks.show_pushrawtx(raw_tx_data, action));
             return string("Provided action is neither check nor push");
 
         });
@@ -557,7 +557,7 @@ main(int ac, const char* av[])
     {
         CROW_ROUTE(app, "/rawkeyimgs")
         ([&]() {
-            return myxmr::htmlresponse(xmrblocks.show_rawkeyimgs());
+            return myxmr::htmlresponse(etcoinblocks.show_rawkeyimgs());
         });
 
         CROW_ROUTE(app, "/checkrawkeyimgs").methods("POST"_method)
@@ -581,7 +581,7 @@ main(int ac, const char* av[])
             string viewkey  = remove_bad_chars(post_body["viewkey"]);
 
             return myxmr::htmlresponse(
-                    xmrblocks.show_checkrawkeyimgs(raw_data, viewkey));
+                    etcoinblocks.show_checkrawkeyimgs(raw_data, viewkey));
         });
     }
 
@@ -590,7 +590,7 @@ main(int ac, const char* av[])
     {
         CROW_ROUTE(app, "/rawoutputkeys")
         ([&]() {
-            return myxmr::htmlresponse(xmrblocks.show_rawoutputkeys());
+            return myxmr::htmlresponse(etcoinblocks.show_rawoutputkeys());
         });
 
         CROW_ROUTE(app, "/checkrawoutputkeys").methods("POST"_method)
@@ -615,7 +615,7 @@ main(int ac, const char* av[])
             string viewkey  = remove_bad_chars(post_body["viewkey"]);
 
             return myxmr::htmlresponse(
-                    xmrblocks.show_checkcheckrawoutput(raw_data, viewkey));
+                    etcoinblocks.show_checkcheckrawoutput(raw_data, viewkey));
         });
     }
 
@@ -623,25 +623,25 @@ main(int ac, const char* av[])
     CROW_ROUTE(app, "/search").methods("GET"_method)
     ([&](const crow::request& req) {
         return myxmr::htmlresponse(
-                xmrblocks.search(
+                etcoinblocks.search(
                     remove_bad_chars(
                         string(req.url_params.get("value")))));
     });
 
     CROW_ROUTE(app, "/mempool")
     ([&]() {
-        return myxmr::htmlresponse(xmrblocks.mempool(true));
+        return myxmr::htmlresponse(etcoinblocks.mempool(true));
     });
 
     // alias to  "/mempool"
     CROW_ROUTE(app, "/txpool")
     ([&]() {
-        return myxmr::htmlresponse(xmrblocks.mempool(true));
+        return myxmr::htmlresponse(etcoinblocks.mempool(true));
     });
 
 //    CROW_ROUTE(app, "/altblocks")
 //    ([&](const crow::request& req) {
-//        return xmrblocks.altblocks();
+//        return etcoinblocks.altblocks();
 //    });
 
     CROW_ROUTE(app, "/robots.txt")
@@ -659,7 +659,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/transaction/<string>")
         ([&](string tx_hash) {
 
-            myxmr::jsonresponse r{xmrblocks.json_transaction(remove_bad_chars(tx_hash))};
+            myxmr::jsonresponse r{etcoinblocks.json_transaction(remove_bad_chars(tx_hash))};
 
             return r;
         });
@@ -667,7 +667,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/rawtransaction/<string>")
         ([&](string tx_hash) {
 
-            myxmr::jsonresponse r{xmrblocks.json_rawtransaction(remove_bad_chars(tx_hash))};
+            myxmr::jsonresponse r{etcoinblocks.json_rawtransaction(remove_bad_chars(tx_hash))};
 
             return r;
         });
@@ -675,7 +675,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/detailedtransaction/<string>")
         ([&](string tx_hash) {
 
-            myxmr::jsonresponse r{xmrblocks.json_detailedtransaction(remove_bad_chars(tx_hash))};
+            myxmr::jsonresponse r{etcoinblocks.json_detailedtransaction(remove_bad_chars(tx_hash))};
 
             return r;
         });
@@ -683,7 +683,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/block/<string>")
         ([&](string block_no_or_hash) {
 
-            myxmr::jsonresponse r{xmrblocks.json_block(remove_bad_chars(block_no_or_hash))};
+            myxmr::jsonresponse r{etcoinblocks.json_block(remove_bad_chars(block_no_or_hash))};
 
             return r;
         });
@@ -691,7 +691,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/rawblock/<string>")
         ([&](string block_no_or_hash) {
 
-            myxmr::jsonresponse r{xmrblocks.json_rawblock(remove_bad_chars(block_no_or_hash))};
+            myxmr::jsonresponse r{etcoinblocks.json_rawblock(remove_bad_chars(block_no_or_hash))};
 
             return r;
         });
@@ -705,7 +705,7 @@ main(int ac, const char* av[])
             string limit = regex_search(req.raw_url, regex {"limit=\\d+"}) ?
                            req.url_params.get("limit") : "25";
 
-            myxmr::jsonresponse r{xmrblocks.json_transactions(
+            myxmr::jsonresponse r{etcoinblocks.json_transactions(
                     remove_bad_chars(page), remove_bad_chars(limit))};
 
             return r;
@@ -723,7 +723,7 @@ main(int ac, const char* av[])
             string limit = regex_search(req.raw_url, regex {"limit=\\d+"}) ?
                            req.url_params.get("limit") : "100000000";
 
-            myxmr::jsonresponse r{xmrblocks.json_mempool(
+            myxmr::jsonresponse r{etcoinblocks.json_mempool(
                     remove_bad_chars(page), remove_bad_chars(limit))};
 
             return r;
@@ -732,7 +732,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/search/<string>")
         ([&](string search_value) {
 
-            myxmr::jsonresponse r{xmrblocks.json_search(remove_bad_chars(search_value))};
+            myxmr::jsonresponse r{etcoinblocks.json_search(remove_bad_chars(search_value))};
 
             return r;
         });
@@ -740,7 +740,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/networkinfo")
         ([&]() {
 
-            myxmr::jsonresponse r{xmrblocks.json_networkinfo()};
+            myxmr::jsonresponse r{etcoinblocks.json_networkinfo()};
 
             return r;
         });
@@ -748,7 +748,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/emission")
         ([&]() {
 
-            myxmr::jsonresponse r{xmrblocks.json_emission()};
+            myxmr::jsonresponse r{etcoinblocks.json_emission()};
 
             return r;
         });
@@ -778,7 +778,7 @@ main(int ac, const char* av[])
                 cerr << "Cant parse tx_prove as bool. Using default value" << endl;
             }
 
-            myxmr::jsonresponse r{xmrblocks.json_outputs(
+            myxmr::jsonresponse r{etcoinblocks.json_outputs(
                     remove_bad_chars(tx_hash),
                     remove_bad_chars(address),
                     remove_bad_chars(viewkey),
@@ -815,7 +815,7 @@ main(int ac, const char* av[])
                      << endl;
             }
 
-            myxmr::jsonresponse r{xmrblocks.json_outputsblocks(
+            myxmr::jsonresponse r{etcoinblocks.json_outputsblocks(
                     remove_bad_chars(limit),
                     remove_bad_chars(address),
                     remove_bad_chars(viewkey),
@@ -827,7 +827,7 @@ main(int ac, const char* av[])
         CROW_ROUTE(app, "/api/version")
         ([&]() {
 
-            myxmr::jsonresponse r{xmrblocks.json_version()};
+            myxmr::jsonresponse r{etcoinblocks.json_version()};
 
             return r;
         });
@@ -840,7 +840,7 @@ main(int ac, const char* av[])
         ([&]() {
             uint64_t page_no {0};
             bool refresh_page {true};
-            return myxmr::htmlresponse(xmrblocks.index2(page_no, refresh_page));
+            return myxmr::htmlresponse(etcoinblocks.index2(page_no, refresh_page));
         });
     }
 

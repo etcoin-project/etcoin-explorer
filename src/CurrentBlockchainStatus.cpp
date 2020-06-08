@@ -1,5 +1,5 @@
 //
-// Created by mwo on 16/05/17.
+// Created by ubuntu on 16/05/17.
 //
 
 #include "CurrentBlockchainStatus.h"
@@ -297,13 +297,13 @@ CurrentBlockchainStatus::is_thread_running()
    return is_running;
 }
 
-bf::path CurrentBlockchainStatus::blockchain_path {"/home/mwo/.bitmonero/lmdb"};
+bf::path CurrentBlockchainStatus::blockchain_path {"/home/ubuntu/.etcoin/lmdb"};
 
 cryptonote::network_type CurrentBlockchainStatus::nettype {cryptonote::network_type::MAINNET};
 
 string CurrentBlockchainStatus::output_file {"emission_amount.txt"};
 
-string CurrentBlockchainStatus::deamon_url {"http:://127.0.0.1:18081"};
+string CurrentBlockchainStatus::deamon_url {"http:://127.0.0.1:14041"};
 
 uint64_t  CurrentBlockchainStatus::blockchain_chunk_size {10000};
 

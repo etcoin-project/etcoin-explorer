@@ -1,5 +1,5 @@
 //
-// Created by mwo on 16/05/17.
+// Created by ubuntu on 16/05/17.
 //
 
 #ifndef XMRBLOCKS_CURRENTBLOCKCHAINSTATUS_H

@@ -2,8 +2,8 @@
 # CMake helper for the majority of the cpp-ethereum modules.
 #
 # This module defines
-#     Monero_XXX_LIBRARIES, the libraries needed to use ethereum.
-#     Monero_FOUND, If false, do not try to use ethereum.
+#     ETcoin_XXX_LIBRARIES, the libraries needed to use ethereum.
+#     ETcoin_FOUND, If false, do not try to use ethereum.
 #
 # File addetped from cpp-ethereum
 #
@@ -33,7 +33,7 @@ set(LIBS common;blocks;cryptonote_basic;cryptonote_core;multisig;
 		blockchain_db;ringct;wallet;cncrypto;easylogging;version;
         checkpoints;randomx;hardforks)
 
-set(Xmr_INCLUDE_DIRS "${CPP_MONERO_DIR}")
+set(Xmr_INCLUDE_DIRS "${CPP_ETCOIN_DIR}")
 
 # if the project is a subset of main cpp-ethereum project
 # use same pattern for variables as Boost uses
@@ -51,30 +51,30 @@ foreach (l ${LIBS})
 
 	set(Xmr_${L}_LIBRARIES ${Xmr_${L}_LIBRARY})
 
-	message(STATUS FindMonero " Xmr_${L}_LIBRARIES ${Xmr_${L}_LIBRARY}")
+	message(STATUS FindETcoin " Xmr_${L}_LIBRARIES ${Xmr_${L}_LIBRARY}")
 
 	add_library(${l} STATIC IMPORTED)
 	set_property(TARGET ${l} PROPERTY IMPORTED_LOCATION ${Xmr_${L}_LIBRARIES})
 
 endforeach()
 
-if (EXISTS ${MONERO_BUILD_DIR}/src/ringct/libringct_basic.a)
-	message(STATUS FindMonero " found libringct_basic.a")
+if (EXISTS ${ETCOIN_BUILD_DIR}/src/ringct/libringct_basic.a)
+	message(STATUS FindETcoin " found libringct_basic.a")
 	add_library(ringct_basic STATIC IMPORTED)
 	set_property(TARGET ringct_basic
-			PROPERTY IMPORTED_LOCATION ${MONERO_BUILD_DIR}/src/ringct/libringct_basic.a)
+			PROPERTY IMPORTED_LOCATION ${ETCOIN_BUILD_DIR}/src/ringct/libringct_basic.a)
 endif()
 
 
-message(STATUS ${MONERO_SOURCE_DIR}/build)
+message(STATUS ${ETCOIN_SOURCE_DIR}/build)
 
-# include monero headers
+# include etcoin headers
 include_directories(
-		${MONERO_SOURCE_DIR}/src
-                ${MONERO_SOURCE_DIR}/src/crypto
-		${MONERO_SOURCE_DIR}/external
-		${MONERO_SOURCE_DIR}/external/randomx/src
-		${MONERO_SOURCE_DIR}/build
-		${MONERO_SOURCE_DIR}/external/easylogging++
-		${MONERO_SOURCE_DIR}/contrib/epee/include
-		${MONERO_SOURCE_DIR}/external/db_drivers/liblmdb)
+		${ETCOIN_SOURCE_DIR}/src
+                ${ETCOIN_SOURCE_DIR}/src/crypto
+		${ETCOIN_SOURCE_DIR}/external
+		${ETCOIN_SOURCE_DIR}/external/randomx/src
+		${ETCOIN_SOURCE_DIR}/build
+		${ETCOIN_SOURCE_DIR}/external/easylogging++
+		${ETCOIN_SOURCE_DIR}/contrib/epee/include
+		${ETCOIN_SOURCE_DIR}/external/db_drivers/liblmdb)

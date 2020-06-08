@@ -1,5 +1,5 @@
 //
-// Created by mwo on 6/11/15.
+// Created by ubuntu on 6/11/15.
 //
 
 #ifndef XMREG01_CMDLINEOPTIONS_H

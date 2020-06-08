@@ -1,5 +1,5 @@
 //
-// Created by mwo on 28/05/17.
+// Created by ubuntu on 28/05/17.
 //
 
 #ifndef XMRBLOCKS_MEMPOOLSTATUS_H

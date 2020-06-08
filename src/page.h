@@ -1,5 +1,5 @@
 //
-// Created by mwo on 8/04/16.
+// Created by ubuntu on 8/04/16.
 //
 
 #ifndef CROWXMR_PAGE_H
@@ -9,7 +9,7 @@
 
 #include "mstch/mstch.hpp"
 
-#include "monero_headers.h"
+#include "etcoin_headers.h"
 #include "randomx.h"
 #include "common.hpp"
 #include "blake2/blake2.h"
@@ -35,7 +35,7 @@
 
 extern "C" uint64_t me_rx_seedheight(const uint64_t height);
 
-// forked version of the rx_slow_hash from monero
+// forked version of the rx_slow_hash from etcoin
 extern "C" void me_rx_slow_hash(const uint64_t mainheight, const uint64_t seedheight,
                              const char *seedhash,
                              const void *data, size_t length,
@@ -259,7 +259,7 @@ struct randomx_status
 };
 
 // modified version of the get_block_longhash
-// from monero to use me_rx_slow_hash
+// from etcoin to use me_rx_slow_hash
 bool
 me_get_block_longhash(const Blockchain *pbc,
                    const block& b,
@@ -584,7 +584,7 @@ index2(uint64_t page_no = 0, bool refresh_page = false)
     {
         json j_info;
 
-        get_monero_network_info(j_info);
+        get_etcoin_network_info(j_info);
 
         return j_info;
     });
@@ -1676,7 +1676,7 @@ show_ringmemberstx_jsonhex(string const& tx_hash_str)
 
     // add placeholder for sender and recipient details
     // this is most useful for unit testing on stagenet/testnet
-    // private monero networks, so we can easly put these
+    // private etcoin networks, so we can easly put these
     // networks accounts details here.
     tx_json["sender"] = json {
                             {"seed", ""},
@@ -1900,7 +1900,7 @@ show_my_outputs(string tx_hash_str,
 
     if (xmr_address_str.empty())
     {
-        return string("Monero address not provided!");
+        return string("ETcoin address not provided!");
     }
 
     if (viewkey_str.empty())
@@ -1920,7 +1920,7 @@ show_my_outputs(string tx_hash_str,
         return string("Cant get tx hash due to parse error: " + tx_hash_str);
     }
 
-    // parse string representing given monero address
+    // parse string representing given etcoin address
     cryptonote::address_parse_info address_info;
 
     if (!xmreg::parse_str_address(xmr_address_str,  address_info, nettype))
@@ -3039,7 +3039,7 @@ show_checkrawtx(string raw_tx_data, string action)
 
             // ok, so its not signed tx data. but maybe it is raw tx data
             // used in rpc call "/sendrawtransaction". This is for example
-            // used in mymonero and openmonero projects.
+            // used in myetcoin and openetcoin projects.
 
             // to check this, first we need to encode data back to base64.
             // the reason is that txs submited to "/sendrawtransaction"
@@ -3402,7 +3402,7 @@ show_pushrawtx(string raw_tx_data, string action)
         ptx_vector.push_back({});
         ptx_vector.back().tx = parsed_tx;
     }
-    // if failed, treat raw_tx_data as base64 encoding of signed_monero_tx
+    // if failed, treat raw_tx_data as base64 encoding of signed_etcoin_tx
     else
     {
         string decoded_raw_tx_data = epee::string_encoding::base64_decode(raw_tx_data);
@@ -4056,11 +4056,11 @@ search(string search_text)
     result_html = default_txt;
 
 
-    // check if monero address is given based on its length
+    // check if etcoin address is given based on its length
     // if yes, then we can only show its public components
     if (search_str_length == 95)
     {
-        // parse string representing given monero address
+        // parse string representing given etcoin address
         address_parse_info address_info;
 
         cryptonote::network_type nettype_addr {cryptonote::network_type::MAINNET};
@@ -4080,7 +4080,7 @@ search(string search_text)
         return show_address_details(address_info, nettype_addr);
     }
 
-    // check if integrated monero address is given based on its length
+    // check if integrated etcoin address is given based on its length
     // if yes, then show its public components search tx based on encrypted id
     if (search_str_length == 106)
     {
@@ -4600,7 +4600,7 @@ json_rawtransaction(string tx_hash_str)
         }
     }
 
-    // get raw tx json as in monero
+    // get raw tx json as in etcoin
 
     try
     {
@@ -4888,7 +4888,7 @@ json_rawblock(string block_no_or_hash)
         return j_response;
     }
 
-    // get raw tx json as in monero
+    // get raw tx json as in etcoin
 
     try
     {
@@ -5232,7 +5232,7 @@ json_outputs(string tx_hash_str,
     if (address_str.empty())
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Monero address not provided";
+        j_response["message"] = "ETcoin address not provided";
         return j_response;
     }
 
@@ -5263,13 +5263,13 @@ json_outputs(string tx_hash_str,
         return j_response;
     }
 
-    // parse string representing given monero address
+    // parse string representing given etcoin address
     address_parse_info address_info;
 
     if (!xmreg::parse_str_address(address_str,  address_info, nettype))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant parse monero address: " + address_str;
+        j_response["message"] = "Cant parse etcoin address: " + address_str;
         return j_response;
 
     }
@@ -5457,7 +5457,7 @@ json_outputsblocks(string _limit,
     if (address_str.empty())
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Monero address not provided";
+        j_response["message"] = "ETcoin address not provided";
         return j_response;
     }
 
@@ -5468,13 +5468,13 @@ json_outputsblocks(string _limit,
         return j_response;
     }
 
-    // parse string representing given monero address
+    // parse string representing given etcoin address
     address_parse_info address_info;
 
     if (!xmreg::parse_str_address(address_str, address_info, nettype))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant parse monero address: " + address_str;
+        j_response["message"] = "Cant parse etcoin address: " + address_str;
         return j_response;
 
     }
@@ -5620,10 +5620,10 @@ json_networkinfo()
     json j_info;
 
     // get basic network info
-    if (!get_monero_network_info(j_info))
+    if (!get_etcoin_network_info(j_info))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant get monero network info";
+        j_response["message"] = "Cant get etcoin network info";
         return j_response;
     }
 
@@ -5712,7 +5712,7 @@ json_version()
             {"last_git_commit_hash", string {GIT_COMMIT_HASH}},
             {"last_git_commit_date", string {GIT_COMMIT_DATETIME}},
             {"git_branch_name"     , string {GIT_BRANCH_NAME}},
-            {"monero_version_full" , string {MONERO_VERSION_FULL}},
+            {"etcoin_version_full" , string {ETCOIN_VERSION_FULL}},
             {"api"                 , ONIONEXPLORER_RPC_VERSION},
             {"blockchain_height"   , core_storage->get_current_blockchain_height()}
     };
@@ -6503,7 +6503,7 @@ get_tx_details(const transaction& tx,
     // get tx public key from extra
     // this check if there are two public keys
     // due to previous bug with sining txs:
-    // https://github.com/monero-project/monero/pull/1358/commits/7abfc5474c0f86e16c405f154570310468b635c2
+    // https://github.com/etcoin-project/etcoin/pull/1358/commits/7abfc5474c0f86e16c405f154570310468b635c2
     txd.pk = xmreg::get_tx_pub_key_from_received_outs(tx);
     txd.additional_pks = cryptonote::get_additional_tx_pub_keys_from_extra(tx);
 
@@ -6699,7 +6699,7 @@ get_full_page(const string& middle)
 }
 
 bool
-get_monero_network_info(json& j_info)
+get_etcoin_network_info(json& j_info)
 {
     MempoolStatus::network_info local_copy_network_info
         = MempoolStatus::current_network_info;
@@ -6794,7 +6794,7 @@ get_footer()
             {"last_git_commit_hash", string {GIT_COMMIT_HASH}},
             {"last_git_commit_date", string {GIT_COMMIT_DATETIME}},
             {"git_branch_name"     , string {GIT_BRANCH_NAME}},
-            {"monero_version_full" , string {MONERO_VERSION_FULL}},
+            {"etcoin_version_full" , string {ETCOIN_VERSION_FULL}},
             {"api"                 , std::to_string(ONIONEXPLORER_RPC_VERSION_MAJOR)
                                      + "."
                                      + std::to_string(ONIONEXPLORER_RPC_VERSION_MINOR)},
